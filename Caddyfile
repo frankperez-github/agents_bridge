@@ -1,0 +1,3 @@
+{$DOMAIN} {
+	reverse_proxy agent-bridge:8000
+}

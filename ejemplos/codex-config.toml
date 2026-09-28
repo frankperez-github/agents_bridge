@@ -1,0 +1,21 @@
+# Añade esto a ~/.codex/config.toml en CADA computadora.
+# Cambia la URL por la del servidor:
+#   Tailscale: http://NOMBRE-MAQUINA:8000/mcp   (o http://100.x.x.x:8000/mcp)
+#   VPS:       https://bridge.tudominio.com/mcp
+# Y guarda el token de ESE dev en la variable de entorno AGENT_BRIDGE_TOKEN
+# (en ~/.zshrc, ~/.bashrc o variables de entorno de Windows).
+
+# --- Opción A: HTTP directo (versiones recientes de Codex) ---
+# Si tu versión lo pide, añade también en la raíz del archivo:
+# experimental_use_rmcp_client = true
+[mcp_servers.agent_bridge]
+url = "http://NOMBRE-MAQUINA:8000/mcp"
+bearer_token_env_var = "AGENT_BRIDGE_TOKEN"
+
+# --- Opción B: puente stdio con mcp-remote (requiere Node.js) ---
+# Úsala si la opción A no conecta. Comenta la A y descomenta esta:
+# [mcp_servers.agent_bridge]
+# command = "npx"
+# args = ["-y", "mcp-remote", "http://NOMBRE-MAQUINA:8000/mcp",
+#         "--allow-http", "--header", "Authorization:Bearer ${AGENT_BRIDGE_TOKEN}"]
+# env_vars = ["AGENT_BRIDGE_TOKEN"]

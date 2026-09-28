@@ -1,0 +1,30 @@
+# Uso básico (Tailscale o red local):   docker compose up -d --build
+# Uso en VPS con HTTPS (Caddy):          docker compose --profile https up -d --build
+services:
+  agent-bridge:
+    build: .
+    container_name: agent-bridge
+    env_file: .env
+    ports:
+      - "${BIND_ADDR:-0.0.0.0}:8000:8000"
+    volumes:
+      - bridge-data:/data
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2
+    profiles: ["https"]
+    env_file: .env
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    depends_on:
+      - agent-bridge
+    restart: unless-stopped
+
+volumes:
+  bridge-data:
+  caddy-data:
